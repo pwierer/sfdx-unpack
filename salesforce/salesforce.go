@@ -8,11 +8,6 @@ import (
 	"strings"
 )
 
-const (
-	ErrInitRequestFailed = "Initializing http request failed"
-	ErrRequestFailed     = "HTTP request failed"
-)
-
 type Salesforce interface {
 	GetUnlockedPackages() ([]InstalledSubscriberPackage, error)
 	GetMetadataComponents(subscriberPackageId string) ([]string, error)
