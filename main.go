@@ -13,11 +13,9 @@ import (
 func main() {
 	var myDomainURL string
 	var sessionID string
-	var sandbox bool
 
 	flag.StringVar(&myDomainURL, "domain", "", "My Domain URL")
 	flag.StringVar(&sessionID, "sid", "", "Session ID")
-	flag.BoolVar(&sandbox, "sandbox", false, "Sandbox")
 	flag.Parse()
 
 	if myDomainURL == "" {
@@ -27,7 +25,7 @@ func main() {
 		sessionID = stringInput("Session ID")
 	}
 
-	sf := salesforce.New(myDomainURL, sessionID, sandbox)
+	sf := salesforce.New(myDomainURL, sessionID)
 	selectedPackage := selectUnlockedPackage(sf)
 	removePackageMetadata(sf, selectedPackage)
 }
@@ -49,7 +47,6 @@ func selectUnlockedPackage(sf salesforce.Salesforce) (selectedPackage salesforce
 	}
 
 	packageNumber := numberInput("Select a package number", 1, len(packages))
-	fmt.Printf("Package Number: %d\n", packageNumber)
 	for i, pkg := range packages {
 		if packageNumber == i+1 {
 			selectedPackage = pkg

@@ -11,9 +11,21 @@ But isn't there an official API or process to do exactly that you might wonder? 
 
 # How does it work then?
 
-The program basically replicates the **Remove** clicks you would be doing in the UI to remove package components. However, in order to do so there are two pieces of information that you will need to provide (I know, and here you thought this would be easy..):
+The program basically replicates the **Remove** clicks you would be doing in the UI to remove package components. However, in order to do so there are three pieces of information that you will need to provide (I know, and here you thought this would be easy..):
 
-### A valid Session ID
+### My Domain URL
+
+You can find your **My Domain URL** in the Setup under `Company Settings -> My Domain` (`/lightning/setup/OrgDomain/home`).
+
+It will look similar to:
+
+* Sandbox: `<company--envName>.my.salesforce.com`
+* Scratch Org: `<randomName>.cs<regionNumber>.my.salesforce.com`
+* Production: `<company>.my.salesforce.com`
+
+Note: The URL can look a bit different in case **Enhanced Domains** are enabled.
+
+### Valid Session ID
 
 There are many ways to obtain a Session ID and unfortunately using the one from the SOAP Login will not work. In order to make sure you got the correct one (yes, there are different ones), I recommend to open one of the installed unlocked packages and click on **View Components**. Your URL should then look like this:
 
@@ -21,7 +33,7 @@ There are many ways to obtain a Session ID and unfortunately using the one from 
 
 Open up the Browser's Developer Tools and retrieve the `sid` cookie from the Domain that ends in `*.my.salesforce.com`. This is essential as there can be different session ids across domains.
 
-### A Confirmation Token
+### Unlocked Package Confirmation Token
 
 Whenever you were to click manually on the **Remove** link to remove a package component, a confirmation token is passed along in the request. This token can be found by simply inspecting one of the **Remove** link elements in the Developer Console:
 
@@ -36,3 +48,29 @@ As you can see the confirmation token hides in there at the end:
 Note: While you only have to look for the Session ID once, you must retrieve the confirmation token for **every** package separately.
 
 With these two things you are ready to mass remove unlocked packages components. Either pull the code and run it yourself (GO v1.18) or simply download the binary from the releases page.
+
+# Usage
+
+```bash
+$ ./sfdxunpack --help
+  -domain string
+        My Domain URL
+  -sid string
+        Session ID
+```
+
+If no arguments are provided you will be prompted to provide the necessary information, otherwise you can provide everything when running the command:
+
+```bash
+$ ./sfdxunpack --domain=company.my.salesforce.com --sid='<SuperLongSessionIdThatShouldBeEnclosedInSingleQuotes>'
+
+Unlocked packages: 
+(1) Package A
+(2) Package B
+Select a package number: 1
+Confirmation Token: <YourPackageConfirmationToken>
+
+# Package components: 100
+removing component '01p3O0000000000000' from package '0A33O0000000000000': 200 OK
+99 remaining
+```

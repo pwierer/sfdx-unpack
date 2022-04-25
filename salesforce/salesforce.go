@@ -15,7 +15,6 @@ type Salesforce interface {
 }
 
 type salesforce struct {
-	Sandbox     bool
 	MyDomainURL string
 	SessionId   string
 }
@@ -46,14 +45,13 @@ type Package2Member struct {
 	SubscriberPackageId string
 }
 
-func New(myDomainURL, sessionID string, sandbox bool) Salesforce {
+func New(myDomainURL, sessionID string) Salesforce {
 	if strings.Contains(myDomainURL, "https://") {
 		myDomainURL = strings.TrimPrefix(myDomainURL, "https://")
 	}
 	return &salesforce{
 		MyDomainURL: myDomainURL,
 		SessionId:   sessionID,
-		Sandbox:     sandbox,
 	}
 }
 
