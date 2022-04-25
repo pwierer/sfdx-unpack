@@ -65,7 +65,7 @@ func removePackageMetadata(sf salesforce.Salesforce, selectedPackage salesforce.
 		os.Exit(1)
 	}
 	fmt.Printf("\n# Package components: %d\n", len(componentIds))
-	for i, id := range componentIds[:2] {
+	for i, id := range componentIds {
 		err := sf.RemovePackageMetadata(selectedPackage.Id, id, confirmToken)
 		if err != nil {
 			fmt.Fprint(os.Stdout, "Could not remove package component")
